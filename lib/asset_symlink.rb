@@ -9,11 +9,8 @@ module AssetSymlink
       if File.dirname(public_name) != '.'
         FileUtils.mkdir_p(File.dirname(public_location))
       end
-      if File.symlink?(public_location)
-        File.delete(public_location)
-      end
       digested_location = digested_location.relative_path_from(public_location.dirname)
-      File.symlink(digested_location, Rails.root.join('public','assets',public_name))
+      FileUtils.ln_sf(digested_location, Rails.root.join('public','assets',public_name))
     end
   end
 
