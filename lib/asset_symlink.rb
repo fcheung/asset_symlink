@@ -18,7 +18,10 @@ module AssetSymlink
   end
 
   def self.normalized_configuration
-    config = Rails.configuration.asset_symlink
+    normalize_configuration Rails.configuration.asset_symlink
+  end
+
+  def self.normalize_configuration config
     case config
     when Hash 
       config
@@ -26,15 +29,12 @@ module AssetSymlink
       {config => config}
     when Array 
       config.inject({}) do |result, element|
-        if element.is_a?(String)
-          result[element] = element
-        else
-          result.merge(element)
-        end
-        result
+        result.merge(normalize_configuration(element))
       end
     when NilClass
       {}
+    else
+      raise ArgumentError, "unexpected item #{config} in config.asset_symlink"
     end
   end
 end
