@@ -1,6 +1,6 @@
 require "asset_symlink/version"
 require "asset_symlink/railtie"
-
+require 'fileutils'
 module AssetSymlink
   def self.execute config
     normalize_configuration(config).each do |private_name, public_name|

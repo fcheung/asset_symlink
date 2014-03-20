@@ -1,6 +1,44 @@
 require 'spec_helper'
 
 describe AssetSymlink do
+
+  describe 'execute' do
+    let(:sandbox) {File.join(File.dirname(__FILE__),'..','tmp')}
+    let(:assets) {Pathname.new(sandbox).join('public', 'assets')}
+
+    before(:each) do
+      FileUtils.rm_rf assets, :secure => true
+      FileUtils.mkdir_p(assets)
+      @assets_stub = double()
+      Rails.stub_chain(:application,:assets => @assets_stub)
+      Rails.stub(:root).and_return(Pathname.new(sandbox))
+    end
+
+    def add_fake_asset(name, location)
+      @assets_stub.stub(:find_asset).with(name).and_return(double(:digest_path => location))
+      FileUtils.mkdir_p(assets.join(location).dirname)
+      File.open(assets.join(location), 'w'){}
+    end
+
+    it 'should symlink items at the top level of the assets folder' do
+      add_fake_asset('widget.js', 'widget-abc123.js')
+      AssetSymlink.execute('widget.js')
+      expect(assets.join('widget.js')).to be_a_symlink_to('widget-abc123.js')
+    end
+
+    it 'should create directories as needed' do
+      add_fake_asset('widget.js', 'widget-abc123.js')
+      AssetSymlink.execute('widget.js' => 'v1/foo.js')
+      expect(assets.join('v1','foo.js')).to be_a_symlink_to('../widget-abc123.js')
+    end
+
+    it 'should use relative links' do
+      add_fake_asset('external/widget.js', 'external/widget-abc123.js')
+      AssetSymlink.execute('external/widget.js')
+      expect(assets.join('external/widget.js')).to be_a_symlink_to('widget-abc123.js')
+    end
+  end
+
   describe 'normalize_configuration' do
     it 'should convert a nil configuration to {}' do
       AssetSymlink.normalize_configuration(nil).should == {}
