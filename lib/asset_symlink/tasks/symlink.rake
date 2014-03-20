@@ -4,6 +4,6 @@ end
 
 namespace :asset_symlink do
   task :symlink do
-    AssetSymlink.execute
+    AssetSymlink.execute Rails.configuration.asset_symlink
   end
 end

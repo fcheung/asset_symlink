@@ -2,8 +2,8 @@ require "asset_symlink/version"
 require "asset_symlink/railtie"
 
 module AssetSymlink
-  def self.execute
-    normalized_configuration.each do |private_name, public_name|
+  def self.execute config
+    normalize_configuration(config).each do |private_name, public_name|
       digested_location = Rails.root.join('public','assets', Rails.application.assets.find_asset(private_name).digest_path)
       public_location = Rails.root.join('public','assets',public_name)
       if File.dirname(public_name) != '.'
@@ -17,9 +17,6 @@ module AssetSymlink
     end
   end
 
-  def self.normalized_configuration
-    normalize_configuration Rails.configuration.asset_symlink
-  end
 
   def self.normalize_configuration config
     case config

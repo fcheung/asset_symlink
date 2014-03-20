@@ -1,3 +1,5 @@
+require 'rails'
+
 module AssetSymlink
   class Railtie < Rails::Railtie
     config.asset_symlink = nil
