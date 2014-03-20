@@ -24,10 +24,13 @@ module AssetSymlink
     when String
       {config => config}
     when Array 
-      config.collect do |element|
+      config.inject({}) do |result, element|
         if element.is_a?(String)
-          {element => element}
+          result[element] = element
+        else
+          result.merge(element)
         end
+        result
       end
     when NilClass
       {}
