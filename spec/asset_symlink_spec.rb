@@ -37,6 +37,15 @@ describe AssetSymlink do
       AssetSymlink.execute('external/widget.js')
       expect(assets.join('external/widget.js')).to be_a_symlink_to('widget-abc123.js')
     end
+
+    it 'should overwrite old symlinks' do
+      add_fake_asset('widget.js', 'widget-abc123.js')
+      File.symlink('widget-old.js', assets.join('widget.js'))
+
+      expect(assets.join('widget.js')).to be_a_symlink_to('widget-old.js')
+      AssetSymlink.execute('widget.js')
+      expect(assets.join('widget.js')).to be_a_symlink_to('widget-abc123.js')
+    end
   end
 
   describe 'normalize_configuration' do
