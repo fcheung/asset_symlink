@@ -1,5 +1,7 @@
 # AssetSymlink
 
+[![Build Status](https://travis-ci.org/fcheung/asset_symlink.png)](https://travis-ci.org/fcheung/asset_symlink)
+
 Rails 4 and above only generate digested assets. From within your app this is a huge win, but it complicates things if you need to know the location of an asset from elsewhere.
 
 This gem automates symlinking your digested assets to their public names. You can rely on the latest
