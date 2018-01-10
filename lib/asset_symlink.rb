@@ -7,7 +7,12 @@ module AssetSymlink
       asset = if !Rails.application.assets.nil?
         Rails.application.assets.find_asset(private_name).digest_path
       else
-        Rails.application.assets_manifest.assets[private_name]
+        manifest = if Sprockets::Railtie.respond_to?(:build_manifest)
+          Sprockets::Railtie.build_manifest(Rails.application)
+        else
+          Rails.application.assets_manifest
+        end 
+        manifest.assets[private_name]
       end
       digested_location = Rails.root.join('public','assets', asset)
       public_location = Rails.root.join('public','assets',public_name)
