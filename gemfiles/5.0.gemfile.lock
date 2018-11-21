@@ -2,7 +2,7 @@ PATH
   remote: ..
   specs:
     asset_symlink (0.3.0)
-      rails (>= 4, < 5.2)
+      rails (>= 4, <= 5.2)
 
 GEM
   remote: https://rubygems.org/
@@ -132,4 +132,4 @@ DEPENDENCIES
   rspec (~> 2.14.0)
 
 BUNDLED WITH
-   1.16.0
+   1.17.1
