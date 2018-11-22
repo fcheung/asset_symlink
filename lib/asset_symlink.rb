@@ -27,6 +27,15 @@ module AssetSymlink
 
   def self.normalize_configuration config
     case config
+    when :all
+      result = {}
+      manifest_file = Rails.application.config.assets.manifest
+      if manifest_file.nil?
+        raise ArgumentError, "please set config.assets.manifest = 'path/to/your/manifest.json'"
+      end
+      JSON.parse(File.read(manifest_file))["files"].map do |digested_name, value|
+        [value['logical_path'], value['logical_path']]
+      end.to_h
     when Hash
       config
     when String
@@ -36,16 +45,7 @@ module AssetSymlink
         result.merge(normalize_configuration(element))
       end
     when NilClass
-      result = {}
-      begin
-        manifest = JSON.parse(File.read(Rails.application.config.assets.manifest))
-        manifest["files"].each do |digested_name, value|
-          result[value['logical_path']] = value['logical_path']
-        end
-        result
-      rescue
-        {}
-      end
+      {}
     else
       raise ArgumentError, "unexpected item #{config} in config.asset_symlink"
     end

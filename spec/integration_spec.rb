@@ -5,12 +5,12 @@ describe 'Integration specs' do
   end
   let(:assets) {test_app_location.join('public', 'assets')}
   def run_in_test_app(command)
-    Dir.chdir(test_app_location) do      
+    Dir.chdir(test_app_location) do
       output = Kernel.send :`,command
       raise output unless $? == 0
     end
   end
-  
+
   before :all do
     FileUtils.rm_rf(test_app_location.join('public', 'assets'))
     run_in_test_app('rake assets:precompile 2>&1')
