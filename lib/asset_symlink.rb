@@ -11,7 +11,7 @@ module AssetSymlink
           Sprockets::Railtie.build_manifest(Rails.application)
         else
           Rails.application.assets_manifest
-        end 
+        end
         manifest.assets[private_name]
       end
       digested_location = Rails.root.join('public','assets', asset)
@@ -27,11 +27,20 @@ module AssetSymlink
 
   def self.normalize_configuration config
     case config
-    when Hash 
+    when :all
+      result = {}
+      manifest_file = Rails.application.config.assets.manifest
+      if manifest_file.nil?
+        raise ArgumentError, "please set config.assets.manifest = 'path/to/your/manifest.json'"
+      end
+      JSON.parse(File.read(manifest_file))["files"].map do |digested_name, value|
+        [value['logical_path'], value['logical_path']]
+      end.to_h
+    when Hash
       config
     when String
       {config => config}
-    when Array 
+    when Array
       config.inject({}) do |result, element|
         result.merge(normalize_configuration(element))
       end
