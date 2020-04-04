@@ -13,7 +13,7 @@ matrix:
   - rvm: 2.6
     gemfile: gemfiles/5.1.gemfile
   - rvm: 2.6
-    gemfile: gemfiles/5.1.gemfile
+    gemfile: gemfiles/5.0.gemfile
 gemfiles:
 - gemfiles/6.0.gemfile
 - gemfiles/4.2.10.gemfile
