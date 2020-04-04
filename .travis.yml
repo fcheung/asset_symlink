@@ -1,19 +1,18 @@
 language: ruby
 install: bundle install
+rvm:
+  - 2.4
+  - 2.5
+  - 2.6
 matrix:
-  include:
+  exclude:
   - rvm: 2.4
-    gemfile:
-      - gemfiles/4.2.10.gemfile
-  - rvm: 2.5
-    gemfile:
-      - gemfiles/5.0.gemfile
-      - gemfiles/5.1.gemfile
-      - gemfiles/5.2.gemfile
-      - gemfiles/6.0.gemfile
+    gemfile: gemfiles/6.0.gemfile
   - rvm: 2.6
-    gemfile:
-      - gemfiles/5.2.gemfile
-      - gemfiles/6.0.gemfile
+    gemfile: gemfiles/4.2.10.gemfile
+  - rvm: 2.6
+    gemfile: gemfiles/5.1.gemfile
+  - rvm: 2.6
+    gemfile: gemfiles/5.0.gemfile
 
 script: "bundle exec rake spec"
